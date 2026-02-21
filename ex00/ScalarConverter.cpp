@@ -6,7 +6,7 @@
 /*   By: joeyscags <jcupp@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 21:04:56 by joeyscags         #+#    #+#             */
-/*   Updated: 2026/02/21 14:29:45 by joeyscags        ###   ########.fr       */
+/*   Updated: 2026/02/21 19:10:02 by joeyscags        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,10 +164,137 @@ void ScalarConverter::printDouble(double value, bool isPseudo)
 		std::cout << value << std::endl;
 }
 
+// ─── Conversion From Detected Types ─────────────────────────────────────────
+
+void ScalarConverter::convertFromChar(const std::string &literal)
+{
+	char c = literal[0];
+	double value = static_cast<double>(c);
+	printChar(value, false);
+	printInt(value, false);
+	printFloat(value, false);
+	printDouble(value, false);
+}
+
+void ScalarConverter::convertFromInt(const std::string &literal)
+{
+	long long ll;
+	bool overflow = false;
+	try
+	{
+		ll = std::stoll(literal);
+		if (ll < INT_MIN || ll > INT_MAX)
+			overflow = true;
+	}
+	catch (...)
+	{
+		overflow = true;
+		ll = 0;
+	}
+
+	double value = static_cast<double>(ll);
+	printChar(value, overflow);
+	if (overflow)
+		std::cout << "int: impossible" << std::endl;
+	else
+		printInt(value, false);
+	printFloat(value, overflow);
+	printDouble(value, overflow);
+}
+
+void ScalarConverter::convertFromFloat(const std::string &literal)
+{
+	std::string trimmed = literal.substr(0, literal.length() - 1);
+	float f;
+	try
+	{
+		f = std::stof(trimmed);
+	}
+	catch (...)
+	{
+		std::cout << "char: impossible" << std::endl;
+		std::cout << "int: impossible" << std::endl;
+		std::cout << "float: impossible" << std::endl;
+		std::cout << "double: impossible" << std::endl;
+		return;
+	}
+	double value = static_cast<double>(f);
+	printChar(value, false);
+	printInt(value, false);
+	printFloat(value, false);
+	printDouble(value, false);
+}
+
+void ScalarConverter::convertFromDouble(const std::string &literal)
+{
+	double d;
+	try
+	{
+		d = std::stod(literal);
+	}
+	catch (...)
+	{
+		std::cout << "char: impossible" << std::endl;
+		std::cout << "int: impossible" << std::endl;
+		std::cout << "float: impossible" << std::endl;
+		std::cout << "double: impossible" << std::endl;
+		return;
+	}
+	printChar(d, false);
+	printInt(d, false);
+	printFloat(d, false);
+	printDouble(d, false);
+}
+
+void ScalarConverter::convertFromPseudo(const std::string &literal)
+{
+	double value;
+
+	if (literal == "nanf" || literal == "nan")
+		value = std::numeric_limits<double>::quiet_NaN();
+	else if (literal == "+inff" || literal == "+inf"
+		|| literal == "inff" || literal == "inf")
+		value = std::numeric_limits<double>::infinity();
+	else
+		value = -std::numeric_limits<double>::infinity();
+
+	printChar(value, true);
+	printInt(value, true);
+	printFloat(value, true);
+	printDouble(value, true);
+}
+
 // ─── Public Static Method ────────────────────────────────────────────────────
 
 void ScalarConverter::convert(const std::string &literal)
 {
-	(void)literal;
-	std::cout << "convert() called" << std::endl;
+	if (literal.empty())
+	{
+		std::cout << "Error: empty literal" << std::endl;
+		return;
+	}
+
+	LiteralType type = detectType(literal);
+
+	switch (type)
+	{
+		case CHAR:
+			convertFromChar(literal);
+			break;
+		case INT:
+			convertFromInt(literal);
+			break;
+		case FLOAT:
+			convertFromFloat(literal);
+			break;
+		case DOUBLE:
+			convertFromDouble(literal);
+			break;
+		case PSEUDO:
+			convertFromPseudo(literal);
+			break;
+		default:
+			std::cout << "Error: invalid literal" << std::endl;
+			break;
+	}
 }
