@@ -6,7 +6,7 @@
 /*   By: joeyscags <jcupp@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 21:04:40 by joeyscags         #+#    #+#             */
-/*   Updated: 2026/02/20 22:41:53 by joeyscags        ###   ########.fr       */
+/*   Updated: 2026/02/21 14:29:45 by joeyscags        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <string>
 # include <iostream>
+# include <climits>
+# include <cmath>
 
 class ScalarConverter
 {
@@ -43,6 +45,11 @@ class ScalarConverter
 		static bool			isFloat(const std::string &literal);
 		static bool			isDouble(const std::string &literal);
 		static bool			isPseudo(const std::string &literal);
+
+	static void			printChar(double value, bool impossible);
+	static void			printInt(double value, bool impossible);
+	static void			printFloat(double value, bool isPseudo);
+	static void			printDouble(double value, bool isPseudo);
 };
 
 #endif
