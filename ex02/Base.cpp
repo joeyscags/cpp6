@@ -6,7 +6,7 @@
 /*   By: joeyscags <jcupp@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 10:00:00 by joeyscags         #+#    #+#             */
-/*   Updated: 2026/02/24 20:00:18 by joeyscags        ###   ########.fr       */
+/*   Updated: 2026/02/24 20:04:35 by joeyscags        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,29 @@ void identify(Base* p)
 
 void identify(Base& p)
 {
-	std::cout << "identify(Base&) called" << std::endl;
+	try
+	{
+		(void)dynamic_cast<A&>(p);
+		std::cout << "A" << std::endl;
+		return;
+	}
+	catch (std::exception&) {}
+
+	try
+	{
+		(void)dynamic_cast<B&>(p);
+		std::cout << "B" << std::endl;
+		return;
+	}
+	catch (std::exception&) {}
+
+	try
+	{
+		(void)dynamic_cast<C&>(p);
+		std::cout << "C" << std::endl;
+		return;
+	}
+	catch (std::exception&) {}
+
+	std::cout << "Unknown type" << std::endl;
 }
