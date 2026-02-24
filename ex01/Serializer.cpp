@@ -6,7 +6,7 @@
 /*   By: joeyscags <jcupp@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 10:00:00 by joeyscags         #+#    #+#             */
-/*   Updated: 2026/02/22 18:49:20 by joeyscags        ###   ########.fr       */
+/*   Updated: 2026/02/24 13:55:04 by joeyscags        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,10 @@ Serializer::~Serializer() {}
 
 uintptr_t Serializer::serialize(Data* ptr)
 {
-	(void)ptr;
-	return 0;
+	return reinterpret_cast<uintptr_t>(ptr);
 }
 
 Data* Serializer::deserialize(uintptr_t raw)
 {
-	(void)raw;
-	return nullptr;
+	return reinterpret_cast<Data*>(raw);
 }
