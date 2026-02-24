@@ -6,23 +6,55 @@
 /*   By: joeyscags <jcupp@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 10:00:00 by joeyscags         #+#    #+#             */
-/*   Updated: 2026/02/24 16:48:06 by joeyscags        ###   ########.fr       */
+/*   Updated: 2026/02/24 20:00:18 by joeyscags        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Base.hpp"
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 Base::~Base() {}
 
 Base* generate(void)
 {
-	return nullptr;
+	static bool seeded = false;
+	if (!seeded)
+	{
+		std::srand(std::time(NULL));
+		seeded = true;
+	}
+
+	int random = std::rand() % 3;
+
+	if (random == 0)
+	{
+		std::cout << "Generated: A" << std::endl;
+		return new A();
+	}
+	else if (random == 1)
+	{
+		std::cout << "Generated: B" << std::endl;
+		return new B();
+	}
+	else
+	{
+		std::cout << "Generated: C" << std::endl;
+		return new C();
+	}
 }
 
 void identify(Base* p)
 {
-	std::cout << "identify(Base*) called" << std::endl;
+	if (dynamic_cast<A*>(p))
+		std::cout << "A" << std::endl;
+	else if (dynamic_cast<B*>(p))
+		std::cout << "B" << std::endl;
+	else if (dynamic_cast<C*>(p))
+		std::cout << "C" << std::endl;
+	else
+		std::cout << "Unknown type" << std::endl;
 }
 
 void identify(Base& p)
